@@ -1,30 +1,50 @@
 letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-# direction = input("Type 'e' to encrypt or 'd' to decrypt:\n")
+direction = input("Type 'e' to encrypt or 'd' to decrypt:\n")
 text = input("Type your message:\n").lower()
 shift = int(input("Type the shift number:\n"))
 
 list1 = []
 list1[:0] = text
 list_length = len(list1)
-print(list1)
-
+# print(list1)
 
 def encrypt():
-    for x in letters:
-        if list1[x] == letters[y]:
-            print(list1[x])
-            new_index = y + shift
-            if new_index > 25:
-                new_index -= 26
-                list1[x] = letters[new_index]
+    for x in range(0,list_length):
+        for y in range(0,26):
+            if list1[x] == letters[y]:
+                new_index = y + shift
+                if new_index > 25:
+                    new_index -= 26
                 else:
-                    new_index = new_index
-                    list1[x] = letters[new_index]
-                # list1[x] = letters[new_index]
-                encrypted_message = "".join(list1[x])
-            else:
+                    break
                 break
-    # print(encrypted_message)
-                # print(letters[])
+            else:
+                continue
+            break
+        list1[x] = letters[new_index]
+    encrypted_message = "".join(list1)
+    print(f"Your encrypted message is: {encrypted_message}")
 
-encrypt()
+def decrypt():
+    for x in range(0,list_length):
+        for y in range(0,26):
+            if list1[x] == letters[y]:
+                new_index = y - shift
+                if new_index < 0:
+                    new_index = 26 + new_index
+                else:
+                    break
+                break
+            else:
+                continue
+            break
+        list1[x] = letters[new_index]
+    decrypted_message = "".join(list1)
+    print(f"Your decrypted message is: {decrypted_message}")
+
+if direction == "e":
+    encrypt()
+elif direction == "d":
+    decrypt()
+else:
+    print("Invalid input")
