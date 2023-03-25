@@ -1,0 +1,27 @@
+year = int(input("Enter the year:\n"))
+
+def leap_year_finder():
+    if year % 4 != 0:
+        return False
+    elif year % 100 != 0:
+        return True
+    elif year % 400 != 0:
+        return False
+    else:
+        return True
+
+def Days_in_february():
+    if leap_year_finder():
+        february = 29
+    else:
+        february = 28
+    return february
+
+def Number_of_days():
+    Days = (31*7) + (30*4) + Days_in_february()
+    print(f"Number of days in {year} is {Days}")
+
+
+Number_of_days()
+
+
