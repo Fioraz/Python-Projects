@@ -1,9 +1,9 @@
 import random
+import hangman_art
 from wordList import words
 
-
+print(hangman_art.logo)
 random_word = random.choice(words)
-print(random_word)
 str_length = len(random_word)
 word = []
 
@@ -12,6 +12,7 @@ for i in range(0,str_length):
     
 str_word1  = " ".join(word)
 print(str_word1)
+
 
 lives = 6
 space_count = str_length
@@ -36,53 +37,59 @@ while lives >= 0 and space_count > 0:
         lives -= 1
         print(f"Lives left: {lives}")
         if lives == 5:
-            print('''
-            +----+
-            |    |
-            |    0
-            |    
-          -----    
-            ''')
+            print(hangman_art.stages[5])
+          #       '''
+          #   +----+
+          #   |    |
+          #   |    0
+          #   |    
+          # -----    
+          #   ''')
         elif lives == 4:
-            print('''
-            +----+
-            |    |
-            |    0
-            |    | 
-          -----   
-            ''')
+            print(hangman_art.stages[4])
+          #       '''
+          #   +----+
+          #   |    |
+          #   |    0
+          #   |    | 
+          # -----   
+          #   ''')
         elif lives == 3:
-            print('''
-            +----+
-            |    |
-            |    0
-            |   /| 
-          -----    
-            ''')
+            print(hangman_art.stages[3])
+          #       '''
+          #   +----+
+          #   |    |
+          #   |    0
+          #   |   /| 
+          # -----    
+          #   ''')
         elif lives == 2:
-            print('''
-            +----+
-            |    |
-            |    0
-            |   /|\ 
-          -----    
-            ''')
+            print(hangman_art.stages[2])
+          #       '''
+          #   +----+
+          #   |    |
+          #   |    0
+          #   |   /|\ 
+          # -----    
+          #   ''')
         elif lives == 1:
-            print('''
-            +----+
-            |    |
-            |    0
-            |   /|\ 
-          ----- /  
-            ''')
+            print(hangman_art.stages[1])
+          #       '''
+          #   +----+
+          #   |    |
+          #   |    0
+          #   |   /|\ 
+          # ----- /  
+          #   ''')
         else:
-            print('''
-            +----+
-            |    |
-            |    0
-            |   /|\ 
-          ----- / \ 
-            ''')
+            print(hangman_art.stages[0])
+          #       '''
+          #   +----+
+          #   |    |
+          #   |    0
+          #   |   /|\ 
+          # ----- / \ 
+          #   ''')
             print("You lost!")
             break
     

@@ -5,6 +5,7 @@ card_list = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 user_cards_list = {}
 computer_cards_list = {}
 
+# Calculate computer's score
 def computer_score(computer_cards_list):
     length = len(computer_cards_list["cards"])
     current_score = 0
@@ -12,8 +13,9 @@ def computer_score(computer_cards_list):
         current_score += computer_cards_list["cards"][x]
     return current_score
 
+# Calculate user's score
 def user_score(user_cards_list, computer_cards_list):
-    length = len(user_cards_list["cards"])
+    length = len(user_cards_list["cards"]) #length of user_cards_list
     current_score = 0
     ccard = computer_cards_list["cards"][0]
     ucard = user_cards_list["cards"]
@@ -23,6 +25,7 @@ def user_score(user_cards_list, computer_cards_list):
     print(f"Computer's first card: {ccard}")
     return current_score
 
+# Win / lose / draw decision
 def decision(uscore, cscore):
     if (21 > uscore > cscore) or (uscore == 21 and cscore < 21):
         print("You win 😃")
@@ -33,8 +36,7 @@ def decision(uscore, cscore):
     elif uscore > 21:
         print("You went over. You lose 😭")
     else:
-        print("You lose 😤")
-    
+        print("You lose 😤") 
 
 def display():
     print(Blackjack_art.logo)
@@ -76,5 +78,4 @@ def display():
                     print(f"Computer's cards {computer_cards_list['cards']}, computer score {cscore}")
                     break
                 
-
 display()
