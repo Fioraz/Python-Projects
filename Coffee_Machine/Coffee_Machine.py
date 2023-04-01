@@ -18,11 +18,6 @@ def cost_dict():
     }
     return cost
 
-# Turn off the Coffee Machine by entering “off” to the prompt
-# def off():
-#     turn_off = True
-#     return turn_off
-
 # Print report
 def print_report(drinks, cost):
     available_resources = drinks["available_resources"]
@@ -32,9 +27,6 @@ def print_report(drinks, cost):
     print(f"Coffee: {available_resources[1]}g")
     print(f"Money: ${available_money}")  
     return available_resources
-
-
-
 
 # Process coins.
 def process_coins():
@@ -59,20 +51,20 @@ def check_transaction(drinks, cost, money, user_input):
     if total > money:
         change = round((total - money),2)
         print(f"Here is ${change} in change.")
+        # Make Coffee.
         print(f"Here is your {user_input} ☕ Enjoy!")
         drinks, cost = update_resources(drinks, cost, user_input, money)
+        return drinks, cost
     elif total == money:
-        print("Here is your coffee")
+        # Make Coffee.
+        print(f"Here is your {user_input} ☕ Enjoy!")
         drinks, cost = update_resources(drinks, cost, user_input, money)
+        return drinks, cost
     else:
         print("Sorry that's not enough money. Money refunded.")
-    # check_resources(drinks, cost)
-
-
+     
 # Check resources sufficient?
 def check_resources(drinks, cost):
-    drinks = drinks_dict()
-    cost = cost_dict()
     turn_off = False
     available_resources =  drinks["available_resources"]
     espresso = drinks["espresso"]
@@ -130,10 +122,4 @@ def check_resources(drinks, cost):
         else:
             turn_off = True
 
-
-    # check_resources()
-    # process_coins()
-    # check_transaction()
-    
-
-# Make Coffee.
+check_resources(drinks = drinks_dict(), cost = cost_dict())
