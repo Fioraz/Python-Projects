@@ -2,9 +2,9 @@ from resources import MENU, resources
 
 def drinks_dict():
     drinks = {
-        "espresso" : [(MENU["espresso"]["ingredients"]["water"]), (MENU["espresso"]["ingredients"]["coffee"])],
-        "latte" : [(MENU["latte"]["ingredients"]["water"]), (MENU["latte"]["ingredients"]["coffee"]), (MENU["espresso"]["ingredients"]["milk"])],
-        "cappuccino" : [(MENU["espresso"]["ingredients"]["water"]), (MENU["espresso"]["ingredients"]["coffee"]), (MENU["espresso"]["ingredients"]["milk"])],
+        "espresso" : [(MENU["espresso"]["ingredients"]["water"]), (MENU["espresso"]["ingredients"]["coffee"]), 0],
+        "latte" : [(MENU["latte"]["ingredients"]["water"]), (MENU["latte"]["ingredients"]["coffee"]), (MENU["latte"]["ingredients"]["milk"])],
+        "cappuccino" : [(MENU["cappuccino"]["ingredients"]["water"]), (MENU["cappuccino"]["ingredients"]["coffee"]), (MENU["cappuccino"]["ingredients"]["milk"])],
         "available_resources" : [resources["water"], resources["coffee"], resources["milk"]]
     }
     return drinks
@@ -13,112 +13,127 @@ def cost_dict():
     cost = {
         "espresso" : MENU["espresso"]["cost"],
         "latte" : MENU["latte"]["cost"],
-        "cappuccino" : MENU["cappuccino"]["cost"]
+        "cappuccino" : MENU["cappuccino"]["cost"],
+        "available_money" : 0
     }
-
-# def select_espresso():
-#     espresso = []
-
-#     espresso.append(MENU["espresso"]["ingredients"]["water"])
-#     espresso.append(0)
-#     espresso.append(MENU["espresso"]["ingredients"]["coffee"])
-#     espresso.append(MENU["espresso"]["cost"])
-#     return espresso
-
-# def select_latte():
-#     latte = []
-#     latte.append(MENU["latte"]["ingredients"]["water"])
-#     latte.append(MENU["espresso"]["milk"])
-#     latte.append(MENU["latte"]["ingredients"]["coffee"])
-#     latte.append(MENU["espresso"]["cost"])
-#     return latte
-    
-# def select_cappuccino():
-#     cappuccino = []
-#     cappuccino.append(MENU["latte"]["ingredients"]["water"])
-#     cappuccino.append(MENU["espresso"]["milk"])
-#     cappuccino.append(MENU["latte"]["ingredients"]["coffee"])
-#     cappuccino.append(MENU["espresso"]["cost"])
-#     return cappuccino
+    return cost
 
 # Turn off the Coffee Machine by entering “off” to the prompt
-def off():
-    turn_off = True
-    return turn_off
+# def off():
+#     turn_off = True
+#     return turn_off
 
 # Print report
-def print_report():
+def print_report(drinks, cost):
     available_resources = drinks["available_resources"]
+    available_money = cost["available_money"]
     print(f"Water: {available_resources[0]}ml")
     print(f"Milk: {available_resources[2]}ml")
     print(f"Coffee: {available_resources[1]}g")
-    print(f"Money: ${available_resources[3]}")  #########<<<<<<<<<<<<<<<
+    print(f"Money: ${available_money}")  
     return available_resources
 
-# Check resources sufficient?
-def check_resources():
-    available_resources = print_report()
-    espresso = drinks["espresso"]
-    latte = drinks["latte"]
-    cappuccino = drinks["cappuccino"]
-    proceed = False
-    money = 0
 
-    if user_input == "report":
-        print_report()
-    elif user_input == "espresso":
-        if (available_resources[0] >= espresso[0]) and (available_resources[1] >= espresso[1]) :
-            print("Please insert coins.")
-            proceed = True
-            money = espresso[3]
-            return proceed, money, user_input
-        else:
-            if available_resources[0] < espresso[0]:
-                print("Sorry there is not enough water")
-            elif available_resources[2] < espresso[2]:
-                print("Sorry there is not enough coffee")
-            else:
-                print("Sorry there is not enough water and coffee")
-            # return proceed, money
-        
-    elif user_input == "latte":
-        if (available_resources[0] >= espresso[0]) and (available_resources[1] >= espresso[1]) :
-            print("Please insert coins.")
-            proceed = True
-            money = espresso[3]
-            return proceed, money, user_input
-    elif user_input == "cappuccino":
-        print      #####<<<<<<<<<<<<<<<<<<<
-    else:
-        off()
 
 
 # Process coins.
 def process_coins():
-    proceed, money, user_input = check_resources()
-    change = 0
-    if proceed:
-        quarters = int(input("How many quarters?: "))
-        dimes = int(input("How many dimes?: "))
-        nickles = int(input("How many nickles?: "))
-        pennies = int(input("How many pennies?: "))
+    quarters = int(input("How many quarters?: "))
+    dimes = int(input("How many dimes?: "))
+    nickles = int(input("How many nickles?: "))
+    pennies = int(input("How many pennies?: "))
 
     total = (quarters * 0.25) + (dimes * 0.10) + (nickles * 0.05) + (pennies * 0.01)
+    return total
 
-    if total > money:
-        change = total - money
-        print(f"Here is ${change} in change.")
-        print(f"Here is your {user_input} ☕ Enjoy!")
-    elif total == money:
-        print("Here is your coffee")
-    
-
+def update_resources(drinks, cost, user_input, money):  
+    drinks["available_resources"][0] -= drinks[user_input][0]
+    drinks["available_resources"][1] -= drinks[user_input][1]
+    drinks["available_resources"][2] -= drinks[user_input][2]
+    cost["available_money"] += money
+    return drinks, cost
 
 # Check transaction successful?
+def check_transaction(drinks, cost, money, user_input):
+    total = process_coins()
+    if total > money:
+        change = round((total - money),2)
+        print(f"Here is ${change} in change.")
+        print(f"Here is your {user_input} ☕ Enjoy!")
+        drinks, cost = update_resources(drinks, cost, user_input, money)
+    elif total == money:
+        print("Here is your coffee")
+        drinks, cost = update_resources(drinks, cost, user_input, money)
+    else:
+        print("Sorry that's not enough money. Money refunded.")
+    # check_resources(drinks, cost)
 
-# Prompt user by asking “What would you like? (espresso/latte/cappuccino):”
-while off():
-    user_input = input("What would you like? (espresso/latte/cappuccino): ")
+
+# Check resources sufficient?
+def check_resources(drinks, cost):
+    drinks = drinks_dict()
+    cost = cost_dict()
+    turn_off = False
+    available_resources =  drinks["available_resources"]
+    espresso = drinks["espresso"]
+    latte = drinks["latte"]
+    cappuccino = drinks["cappuccino"]
+    # proceed = False
+    money = 0
+    while not turn_off:
+        # Prompt user by asking “What would you like? (espresso/latte/cappuccino):”
+        user_input = input("What would you like? (espresso/latte/cappuccino): ")
+        if user_input == "report":
+            print_report(drinks, cost)
+        elif user_input == "espresso":
+            if (available_resources[0] >= espresso[0]) and (available_resources[1] >= espresso[1]) :
+                print("Please insert coins.")
+                money = cost[user_input]
+                check_transaction(drinks, cost, money, user_input)
+            else:
+                if available_resources[0] < espresso[0]:
+                    print("Sorry there is not enough water")
+                elif available_resources[2] < espresso[2]:
+                    print("Sorry there is not enough coffee")
+                else:
+                    print("Sorry there is not enough water and coffee")
+            
+        elif user_input == "latte":
+            if (available_resources[0] >= latte[0]) and (available_resources[1] >= latte[1]) and (available_resources[2] >= latte[2]):
+                print("Please insert coins.")
+                money = cost[user_input]
+                check_transaction(drinks, cost, money, user_input)
+            else:
+                if available_resources[0] < latte[0]:
+                    print("Sorry there is not enough water")
+                elif available_resources[1] < latte[1]:
+                    print("Sorry there is not enough coffee")
+                elif available_resources[2] < latte[2]:
+                    print("Sorry there is not enough milk")
+                else:
+                    print("Sorry there is not enough water, milk and coffee")
+        elif user_input == "cappuccino":
+            if (available_resources[0] >= cappuccino[0]) and (available_resources[1] >= cappuccino[1]) and (available_resources[2] >= cappuccino[2]):
+                print("Please insert coins.")
+                proceed = True
+                money = cost[user_input]
+                check_transaction(drinks, cost, money, user_input)
+            else:
+                if available_resources[0] < cappuccino[0]:
+                    print("Sorry there is not enough water")
+                elif available_resources[1] < cappuccino[1]:
+                    print("Sorry there is not enough coffee")
+                elif available_resources[2] < cappuccino[2]:
+                    print("Sorry there is not enough milk")
+                else:
+                    print("Sorry there is not enough water, milk and coffee")
+        else:
+            turn_off = True
+
+
+    # check_resources()
+    # process_coins()
+    # check_transaction()
     
 
 # Make Coffee.
